@@ -171,3 +171,12 @@
  :update-window-dimensions
  (fn [{:keys [db]} [_ dimensions]]
    {:db (assoc db :dimensions/window (dimensions/window dimensions))}))
+
+(handlers/register-handler-fx
+ :screens/on-will-focus
+ (fn [{:keys [db] :as cofx} [_ view-id]]
+   (fx/merge cofx
+             {:db (assoc db :view-id view-id)}
+             #(case view-id
+                :keycard-settings (hardwallet/settings-screen-did-load %)
+                nil))))
