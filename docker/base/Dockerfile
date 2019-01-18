@@ -11,8 +11,8 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
-    NVM_DIR="$HOME/.nvm" \
     LEIN_HOME=/var/tmp/lein \
+    LEIN_URL=https://raw.githubusercontent.com/technomancy/leiningen/${LEIN_VERSION}/bin/lein \
     YARN_CACHE_FOLDER=/var/tmp/yarn
 
 RUN mkdir /var/tmp/npm /var/tmp/lein \
@@ -24,7 +24,7 @@ RUN mkdir /var/tmp/npm /var/tmp/lein \
  && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get -q -y --no-install-recommends install \
-      file git wget zip unzip s3cmd build-essential nodejs locales \
+      file jq git wget zip unzip s3cmd build-essential nodejs locales \
       ca-certificates oracle-java8-installer oracle-java8-set-default \
  && locale-gen ${LANG} \
  && npm install -g yarn@${YARN_VERSION} \
@@ -40,14 +40,14 @@ RUN addgroup --gid 1002 jenkins \
  && su jenkins -c "git config --global user.name 'jenkins@status.im'"
 
 # Leiningen setup
-RUN wget -q https://raw.githubusercontent.com/technomancy/leiningen/${LEIN_VERSION}/bin/lein -O /usr/local/bin/lein \
+RUN wget ${LEIN_URL} -O /usr/local/bin/lein \
  && chmod 755 /usr/local/bin/lein \
  && lein version
 
 # Install NVM for Jenkins
-ADD scripts/3rd-party/nvm/${NVM_VERSION}/install.sh /tmp/nvm/${NVM_VERSION}/
-RUN su jenkins -c "
-    bash /tmp/nvm/${NVM_VERSION}/install.sh && \
+ADD nvm_install.sh /tmp/nvm_install.sh
+RUN su jenkins -c w\
+   "bash /tmp/nvm_install.sh && \
     source ~/.nvm/nvm.sh && \
     nvm install ${NODE_VERSION} && \
     nvm alias default ${NODE_VERSION}"
