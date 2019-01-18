@@ -23,10 +23,6 @@ build: $(QT_ARCHIVE)
 		--build-arg="QT_VERSION=$(QT_VERSION)" \
 		--build-arg="QT_CI_COMMIT_SHA=$(QT_CI_COMMIT_SHA)" \
 		--build-arg="REACT_NATIVE_DESKTOP_COMMIT_SHA=$(REACT_NATIVE_DESKTOP_COMMIT_SHA)" \
-		--build-arg="LEIN_VERSION=$(call __toolversion,lein)" \
-		--build-arg="NODE_VERSION=$(call __toolversion,node)" \
-		--build-arg="NVM_VERSION=$(call __toolversion,nvm)" \
-		--build-arg="YARN_VERSION=$(call __toolversion,yarn)" \
 		--label="commit=$(GIT_COMMIT)" \
 		-t $(IMAGE_NAME) .; \
 	rm -rf ./scripts
