@@ -33,7 +33,7 @@ RUN mkdir -p /tmp/react-native-desktop \
  && git reset --hard FETCH_HEAD \
  && cp -r /tmp/react-native-desktop/react-native-cli /opt \
  && cd /opt/react-native-cli \
- && "$NVM_DIR/nvm.sh" \
+ && . "$NVM_DIR/nvm.sh" \
  && npm update \
  && npm install -g \
  && cd \

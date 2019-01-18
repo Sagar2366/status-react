@@ -2,7 +2,7 @@ FROM statusteam/status-build-base:1.1.0 AS qt_build
 
 ARG QT_VERSION
 ARG RNATIVE_VERSION
-ARG QT_CI_COMMIT_SHA
+ARG QT_CI_COMMIT
 
 ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 
@@ -28,7 +28,7 @@ RUN mkdir -p /tmp/qtci \
  && cd /tmp/qtci \
  && git init \
  && git remote add origin https://github.com/benlau/qtci.git \
- && git fetch --depth=1 origin ${QT_CI_COMMIT_SHA} \
+ && git fetch --depth=1 origin ${QT_CI_COMMIT} \
  && git reset --hard FETCH_HEAD \
  && /tmp/qtci/bin/extract-qt-installer --disable-progress-report \
         /tmp/qt-opensource-linux-x64-${QT_VERSION}.run /opt/qt-all \
@@ -76,7 +76,7 @@ RUN mkdir -p /tmp/react-native-desktop \
  && git reset --hard FETCH_HEAD \
  && cp -r /tmp/react-native-desktop/react-native-cli /opt \
  && cd /opt/react-native-cli \
- && source ~/nvm.sh \
+ && . "${NVM_DIR}/nvm.sh" \
  && npm update \
  && npm install -g \
  && cd \

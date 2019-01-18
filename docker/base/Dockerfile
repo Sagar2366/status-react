@@ -13,7 +13,8 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANGUAGE=en_US.UTF-8 \
     LEIN_HOME=/var/tmp/lein \
     LEIN_URL=https://raw.githubusercontent.com/technomancy/leiningen/${LEIN_VERSION}/bin/lein \
-    YARN_CACHE_FOLDER=/var/tmp/yarn
+    YARN_CACHE_FOLDER=/var/tmp/yarn \
+    NVM_DIR=/home/jenkins/.nvm
 
 RUN mkdir /var/tmp/npm /var/tmp/lein \
  && chmod 777 /var/tmp/npm /var/tmp/lein \
@@ -48,7 +49,7 @@ RUN wget ${LEIN_URL} -O /usr/local/bin/lein \
 ADD nvm_install.sh /tmp/nvm_install.sh
 RUN su -l jenkins -c \
    "bash /tmp/nvm_install.sh && \
-    source ~/.nvm/nvm.sh && \
+    . ${NVM_DIR}/nvm.sh && \
     nvm install ${NODE_VERSION} && \
     nvm alias default ${NODE_VERSION}"
 

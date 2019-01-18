@@ -9,9 +9,9 @@ IMAGE_NAME = statusteam/status-build-windows:$(IMAGE_TAG)
 
 build:
 	docker build \
-		--build-arg="RNATIVE_VERSION=$(call __read__toolversion__,react_native_desktop)" \
-		--build-arg="CONAN_VERSION=$(call __read__toolversion__,conan)" \
-		--build-arg="CMAKE_VERSION=$(call __read__toolversion__,cmake)" \
+		--build-arg="RNATIVE_VERSION=$(call __toolversion, react_native_desktop)" \
+		--build-arg="CONAN_VERSION=$(call __toolversion, conan)" \
+		--build-arg="CMAKE_VERSION=$(call __toolversion, cmake)" \
 		--label="commit=$(GIT_COMMIT)" \
 		-t $(IMAGE_NAME) .; \
 
