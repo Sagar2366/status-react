@@ -46,7 +46,7 @@ RUN wget ${LEIN_URL} -O /usr/local/bin/lein \
 
 # Install NVM for Jenkins
 ADD nvm_install.sh /tmp/nvm_install.sh
-RUN su jenkins -c w\
+RUN su -l jenkins -c \
    "bash /tmp/nvm_install.sh && \
     source ~/.nvm/nvm.sh && \
     nvm install ${NODE_VERSION} && \

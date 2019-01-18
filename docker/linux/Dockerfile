@@ -1,8 +1,10 @@
-FROM ubuntu:16.04 AS qt_build
+FROM statusteam/status-build-base:1.1.0 AS qt_build
 
 ARG QT_VERSION
-ARG REACT_NATIVE_DESKTOP_COMMIT_SHA
+ARG RNATIVE_VERSION
 ARG QT_CI_COMMIT_SHA
+
+ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 
 RUN apt-get update \
  && add-apt-repository -y ppa:git-core/ppa \
@@ -31,9 +33,10 @@ RUN mkdir -p /tmp/qtci \
  && /tmp/qtci/bin/extract-qt-installer --disable-progress-report \
         /tmp/qt-opensource-linux-x64-${QT_VERSION}.run /opt/qt-all \
  && find /opt/qt-all/${QT_VERSION}/gcc_64/bin -type f -regextype posix-egrep -regex \
-        '.*\/(qdoc|qgltf|linguist|designer|assistant|qhelpconverter|qmlprofiler)$' -delete
+        '.*\/(qdoc|qgltf|linguist|designer|assistant|qhelpconverter|qmlprofiler)$' -delete \
+ && rm -fr ${XDG_RUNTIME_DIR}
 
-FROM ubuntu:16.04
+FROM statusteam/status-build-base:1.1.0
 
 ARG QT_VERSION
 
@@ -69,7 +72,7 @@ RUN mkdir -p /tmp/react-native-desktop \
  && cd /tmp/react-native-desktop \
  && git init \
  && git remote add origin https://github.com/status-im/react-native-desktop.git \
- && git fetch --depth=1 origin ${REACT_NATIVE_DESKTOP_COMMIT_SHA} \
+ && git fetch --depth=1 origin ${RNATIVE_VERSION} \
  && git reset --hard FETCH_HEAD \
  && cp -r /tmp/react-native-desktop/react-native-cli /opt \
  && cd /opt/react-native-cli \
@@ -78,12 +81,6 @@ RUN mkdir -p /tmp/react-native-desktop \
  && npm install -g \
  && cd \
  && rm -r /tmp/react-native-desktop
-
-# These are the UID and GID values used by Jenkins
-RUN addgroup --gid 1002 jenkins && \
-    adduser --shell /bin/bash \
-      --disabled-password --gecos "" \
-      --uid 1001 --gid 1002 jenkins
 
 LABEL source="https://github.com/status-im/status-react/tree/develop/desktop/docker" \
       description="Image for building Linux Desktop version of Status app." \
