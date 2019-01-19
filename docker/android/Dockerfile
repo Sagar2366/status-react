@@ -8,6 +8,7 @@ ARG SDK_BUILD_TOOLS_VERSION
 
 # names of packages to install with sdkmanager
 ENV SDK_PACKAGES emulator patcher;v4 \
+                 platforms;android-26 \ 
                  platforms;${SDK_PLATFORM_VERSION} \
                  build-tools;${SDK_BUILD_TOOLS_VERSION} \
                  extras;android;m2repository extras;google;m2repository
