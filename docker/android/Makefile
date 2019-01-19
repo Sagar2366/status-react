@@ -17,7 +17,7 @@ SDK_PLATFORM_VERSION=$(call  __toolversion, android-sdk-platform)
 SDK_BUILD_TOOLS_VERSION=$(call  __toolversion, android-sdk-build-tools)
 
 # WARNING: Remember to change the tag when updating the image
-IMAGE_TAG = 1.0.0
+IMAGE_TAG = 1.1.0
 IMAGE_NAME = statusteam/status-build-android:$(IMAGE_TAG)
 
 build: $(ANDROID_NDK_ARCHIVE) $(ANDROID_SDK_ARCHIVE)
